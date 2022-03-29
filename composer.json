@@ -16,9 +16,11 @@
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
         "mailchimp/marketing": "^3.0",
+        "monolog/monolog": "^2.4",
         "spatie/yaml-front-matter": "^2.0"
     },
     "require-dev": {
+        "deployer/recipes": "^6.2",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",
