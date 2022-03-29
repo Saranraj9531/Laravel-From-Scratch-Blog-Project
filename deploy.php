@@ -6,7 +6,7 @@ namespace Deployer;
 require 'recipe/laravel.php';
 require 'recipe/rsync.php';
 
-set('application', 'dep-demo');
+set('application', 'My App');
 set('ssh_multiplexing', true); // Speeds up deployments
 
 set('rsync_src', function () {
@@ -27,6 +27,7 @@ add('rsync', [
     ],
 ]);
 
+
 // Set up a deployer task to copy secrets to the server.
 // Since our secrets are stored in Gitlab, we can access them as env vars.
 task('deploy:secrets', function () {
@@ -34,8 +35,8 @@ task('deploy:secrets', function () {
     upload('.env', get('deploy_path') . '/shared');
 });
 
-// Hosts
-host('3.95.21.113                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ') // Name of the server
+// Production Server
+host('3.95.21.113') // Name of the server
 ->hostname('3.95.21.113') // Hostname or IP address
 ->stage('production') // Deployment stage (production, staging, etc)
 ->user('ubuntu') // SSH user
@@ -44,6 +45,7 @@ host('3.95.21.113                                                               
 after('deploy:failed', 'deploy:unlock'); // Unlock after failed deploy
 
 desc('Deploy the application');
+
 task('deploy', [
     'deploy:info',
     'deploy:prepare',
@@ -53,14 +55,15 @@ task('deploy', [
     'deploy:secrets', // Deploy secrets
     'deploy:shared',
     'deploy:vendors',
-    'deploy:writable',
+    // 'deploy:writable',
     'artisan:storage:link', // |
-    'artisan:view:clear',   // |
-    'artisan:config:cache', // | Laravel specific steps
-    'artisan:queue:restart', // | 
-    'artisan:optimize:clear',    // |
+    'artisan:view:cache',   // |
+    'artisan:config:cache', // | Laravel Specific steps
+    'artisan:optimize:clear',     // |
     'artisan:migrate',      // |
+    'artisan:queue:restart',// |
     'deploy:symlink',
     'deploy:unlock',
     'cleanup',
+
 ]);
